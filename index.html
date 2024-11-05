@@ -1,222 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Daumenfrosch Blizzard Blitz</title>
+    <style>
+      /*canvas Style Unity */
+      #unity-canvas {
+        width: 600px;
+        height: 960px;
+        background: url('Build/Blizzard.jpg') center / cover;
+      }
 
-<head>
-    <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/index.css" rel="stylesheet" type="text/css">
-</head>
+      /* Start Button Style */
+      #startButton {
+        position: absolute;
+        top: 50%;
+        background-color:green;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 40px;
+        font-size: 24px;
+        color:white;
+        text-align: center;
+        font-weight: bold;
+        z-index: 9999; /* button in front*/
+      }
+    </style>
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+    <canvas id="unity-canvas" width=600 height=960 tabindex="-1"></canvas>
+    <script src="Build/Blizzard.loader.js"></script>
+    <button id="startButton">Load Game</button>
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+          var startButton = this;
 
-<body>
-    <div class="container">
-        <h1 class="h11">Portofolio</h1>
+          // Menghilangkan dan menonaktifkan tombol setelah diklik
+          startButton.style.display = 'none';
+          startButton.disabled = true;
 
-        <table class="table-container">
-            <tbody>
-                <tr>
-                    <!-- profile -->
-                    <td class="profile">
-                        <hr>
-                        <h1 class="title">MyProfile</h1>
-                        <div>
-                            <img src="image/aku3.jpg" alt="aku3">
-                            <span>
-                            Perkenalkan Nama Saya Fatkhulloh, Saya Seorang Full stack Game Developer. 
-                            Saya lahir di Pasuruan pada tanggal 26 April 1994. Saya sangat tertarik pada bidang programming 
-dan desain grafis serta merupakan pribadi yang baik, mampu bekerja dalam team maupun individu dan mampu belajar dengan cepat. 
-                            </span>
-                        </div>
-                    </td>
-                    <!-- Skill -->
-                    <td class="skill">
-                        <hr>
-                        <h1 class="title">Skill</h1>
-                        <div class="content">
-                            <ul>
-                                <li>Pemrograman Web
-                                    <div class="level1">
-                                        70%
-                                    </div>
-                                </li>
-                                <li>Pemrograman Dekstop
-                                    <div class="level2">
-                                        80%
-                                    </div>
-                                </li>
-                                <li>Graphic Designer
-                                    <div class="level2">
-                                        80%
-                                    </div>
-                                </li>
-                                <li>Pemrograman Mobile
-                                    <div class="level3">
-                                        50%
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <!-- MyExperience -->
-                    <td class="experience">
-                        <hr>
-                        <h1 class="title">MyExperience </h1>
-                        <div>Beberapa Project yang telah saya kerjakan.</div>
-                        <table class="tabel">
-                            <tr>
-                                <th>No</th>
-                                <th>Experience</th>
-                                <th>Year</th>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Mengikuti Pelatihan Menjadi Game Developer Exper di Dikoding</td>
-                                <td>2018</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Membuat Game Edukasi 2D Pengenalan Sejarah Nabi</td>
-                                <td>2018</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Membuat Augmented Reality Pengenalan Fungsi kaki komponendasar elektronika</td>
-                                <td>2018</td>
-                            </tr>
+      //need to change if you change the build file (From Unity Build)
+          if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+              // Mobile device style: fill the whole browser client area with the game canvas:
+              var meta = document.createElement('meta');
+              meta.name = 'viewport';
+              meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+              document.getElementsByTagName('head')[0].appendChild(meta);
 
-                            <tr>
-                                <td>4</td>
-                                <td>Membuat Game Alot Of Harvest</td>
-                                <td>2019</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <!-- MyEducation -->
-                    <td class="education">
-                        <hr>
-                        <h1 class="title">MyEducation</h1>
-                        <div>Pendidikan yang pernah saya jalani.
-                        </div>
-                        <table class="tabel">
-                            <tr>
-                                <th>No</th>
-                                <th>Institute Name</th>
-                                <th>Year</th>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>SDN 1 Bendungan</td>
-                                <td>2004</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>SMPN 1 Kraton</td>
-                                <td>2008</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>SMKN 1 Bangil <br> (Teknik Elektronika Industri)</td>
-                                <td>2011</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>UNIVERSITAS YUDHARTA PASURUAN <br> (Teknik Informatika)</td>
-                                <td>2018</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <!-- MyProject <2kolom jadi 1>-->
-                    <td class="project" colspan="2">
-                        <hr>
-                        <h1 class="title">MyProjects</h1>
-                        <div>
-                            <div class="content">
-                                <h2>Yudharta Farm 3D</h2>
-                                <a href="https://play.google.com/store/apps/details?id=com.alaminnet.yudhartafarm3d">
-                                    <img src="image/yudharta.png" alt="yudharta.png">
-                                </a>
+              var canvas = document.querySelector("#unity-canvas");
+              canvas.style.width = "100%";
+              canvas.style.height = "100%";
+              canvas.style.position = "fixed";
 
+              document.body.style.textAlign = "left";
+            }
 
-                                <p>Yudharta Farm 3D adalah game berkebun atau bertani 3D yang menghadirkan game petualangan merawat di sebuah taman di sebuah desa bernama desa ngalah. Game ini juga dilengkapi dengan berbagai fitur menarik dimana pemain dapat
-                                    mengupgrade setiap alat yang digunakan.
-                                </p>
-                            </div>
+            createUnityInstance(document.querySelector("#unity-canvas"), {
+              dataUrl: "Build/Blizzard.data",
+              frameworkUrl: "Build/Blizzard.framework.js",
+              codeUrl: "Build/Blizzard.wasm",
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "AN",
+              productName: "Daumenfrosch Blizzard Blitz",
+              productVersion: "1.0",
+              // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+              // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+            });
+      //until this
 
-                            <div class="content">
-                                <h2>Enemy Slasher</h2>
-                                <a href="https://play.google.com/store/apps/details?id=com.it.alaminnet">
-                                    <img src="image/enemyslasher.png" alt="enemyslasher.png">
-                                </a>
-                                <p>enemy slasher adalah permainan platformer 2d sederhana yang mengharuskan pemain mengalahkan semua musuh dengan senjatanya / Slasher
-                                </p>
-                            </div>
-                            <div class="content">
-                                <h2>Udarta Tower Defense</h2>
-                                <a href="https://play.google.com/store/apps/details?id=com.alaminnet.UdartaTowerDefense">
-                                    <img src="image/udharta.png" alt="udharta.png">
-                                </a>
+        });
 
-                                <p>udarta tower defense adalah game tower defense 2d sederhana. pemain diharuskan melindungi tower miliknya sekaligus harus menghancurkan tower dari musuh.
-                                </p>
-                            </div>
-                            <div class="content">
-                                <h2>Mini Racing Car</h2>
-                                <a href="https://play.google.com/store/apps/details?id=com.alaminnet.miniracingcars">
-                                    <img src="image/racing.png" alt="racing.png">
-                                </a>
+          //Default From Unity
+          // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          //     // Mobile device style: fill the whole browser client area with the game canvas:
+          //     var meta = document.createElement('meta');
+          //     meta.name = 'viewport';
+          //     meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+          //     document.getElementsByTagName('head')[0].appendChild(meta);
 
-                                <p>Mini Racing Car adalah game mobil balap mini dengan banyak fitur menarik dan sederhana. pemain akan berlomba dengan mobil mini unik beserta lawan yang siap bertanding.
-                                </p>
-                            </div>
-                        </div>
+          //     var canvas = document.querySelector("#unity-canvas");
+          //     canvas.style.width = "100%";
+          //     canvas.style.height = "100%";
+          //     canvas.style.position = "fixed";
 
-                    </td>
-                </tr>
-                <tr>
-                    <!-- MyProject <2kolom jadi 1>-->
-                    <td class="project" colspan="2">
-                        <hr>
-                        <h1 class="title">Information Contact</h1>
-                        <div>
-                            <div class="content biasa">
+          //     document.body.style.textAlign = "left";
+          //   }
 
-
-                                <p class=" biasa" style="text-align: left ;">Ponsel : 085706200824 <br> E-mail : fatkhulloh6939@gmail.com
-                                    <br> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fatkhulmaskapai99@gmail.com<br> Alamat : Kalimas Utara Rt. 005 Rw. 002 Ds.Bendungan - Kraton - Pasuruan
-                                </p>
-                            </div>
-
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <footer>
-        <div class="container">
-            <form class="contact" action="index.html" method="POST">
-                <hr>
-                <h1 class="title">Contact Me</h1>
-                <div class="form-group">
-                    <input type="text" value="" placeholder="Name">
-                </div>
-                <div class="form-group">
-                    <input type="text" value="" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <textarea name="" id="" cols="80" rows="10" placeholder="Message"></textarea>
-                </div>
-                <div class="form-group">
-                    <button type="submit" name="button">Send</button>
-                    <button type="reset" name="reset">Clear</button>
-                </div>
-            </form>
-        </div>
-    </footer>
-</body>
-
+          //   createUnityInstance(document.querySelector("#unity-canvas"), {
+          //     dataUrl: "Build/Blizzard.data",
+          //     frameworkUrl: "Build/Blizzard.framework.js",
+          //     codeUrl: "Build/Blizzard.wasm",
+          //     streamingAssetsUrl: "StreamingAssets",
+          //     companyName: "AN",
+          //     productName: "Daumenfrosch Blizzard Blitz",
+          //     productVersion: "1.0",
+          //     // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+          //     // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+          //   });
+    </script>
+  </body>
 </html>
