@@ -10,7 +10,7 @@
         width: 600px;
         height: 960px;
         /* background: url('Build/Blizzard.jpg') center / cover; */
-        background: url('loadgame.png') center / cover;
+        background: url('ass/loadgame.png') center / cover;
         background-position: center; 
         background-size: cover;
         position: relative;
@@ -59,7 +59,7 @@
     </div>
     <script>
       // //audio path
-      var audio = new Audio('buttonClick.mp3');
+      var audio = new Audio('ass/buttonClick.mp3');
       // var audio = new Audio('backgroundGame.mp3');
 
       // // Play Audio
@@ -83,30 +83,56 @@
         var canvas = document.getElementById('unity-canvas');
         canvas.style.zIndex = '10000';
 
-        //1. this is copy from unity default export
+        // //1. this is copy from unity default export
+        // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        //   var meta = document.createElement('meta');
+        //   meta.name = 'viewport';
+        //   meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        //   document.getElementsByTagName('head')[0].appendChild(meta);
+
+        //   canvas.style.width = "100%";
+        //   canvas.style.height = "100%";
+        //   canvas.style.position = "fixed";
+
+        //   document.body.style.textAlign = "left";
+        // }
+
+        // // Start game unity Instance
+        // var myGameInstance = createUnityInstance(canvas, {
+        //   dataUrl: "Build/Blizzard.data",
+        //   frameworkUrl: "Build/Blizzard.framework.js",
+        //   codeUrl: "Build/Blizzard.wasm",
+        //   streamingAssetsUrl: "StreamingAssets",
+        //   companyName: "AN",
+        //   productName: "Daumenfrosch Blizzard Blitz",
+        //   productVersion: "1.0",
+        // });
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          var meta = document.createElement('meta');
-          meta.name = 'viewport';
-          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-          document.getElementsByTagName('head')[0].appendChild(meta);
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
 
-          canvas.style.width = "100%";
-          canvas.style.height = "100%";
-          canvas.style.position = "fixed";
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
 
-          document.body.style.textAlign = "left";
-        }
+        document.body.style.textAlign = "left";
+      }
 
-        // Start game unity Instance
-        var myGameInstance = createUnityInstance(canvas, {
-          dataUrl: "Build/Blizzard.data",
-          frameworkUrl: "Build/Blizzard.framework.js",
-          codeUrl: "Build/Blizzard.wasm",
-          streamingAssetsUrl: "StreamingAssets",
-          companyName: "AN",
-          productName: "Daumenfrosch Blizzard Blitz",
-          productVersion: "1.0",
-        });
+      var gm =   createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/Blizzard.data",
+        frameworkUrl: "Build/Blizzard.framework.js",
+        codeUrl: "Build/Blizzard.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "AN",
+        productName: "Daumenfrosch Blizzard Blitz",
+        productVersion: "1.0",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
 
         //2.
       });
