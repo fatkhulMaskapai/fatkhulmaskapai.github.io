@@ -50,35 +50,37 @@
     <canvas id="unity-canvas" width="600" height="960" tabindex="-1"></canvas>
     <script src="Build/Blizzard.loader.js"></script>
     <div id="buttonContainer">
-      <button id="playSoundButton">Play Sound</button>
-      <button id="stopSoundButton">Stop Sound</button>
-      <button id="startButton">Load Game v2</button>
+      <!-- <button id="playSoundButton">Play Sound</button>
+      <button id="stopSoundButton">Stop Sound</button> -->
+      <button id="startButton">Load Game v3</button>
     </div>
     <script>
-      // Inisialisasi audio
-      var audio = new Audio('backgroundGame.mp3'); // Ganti dengan path file audio Anda
+      // //audio path
+      var audio = new Audio('buttonClick.mp3');
+      // var audio = new Audio('backgroundGame.mp3');
 
-      // Event listener untuk tombol Play Sound
-      document.getElementById('playSoundButton').addEventListener('click', function() {
-        audio.play();
-      });
+      // // Play Audio
+      // document.getElementById('playSoundButton').addEventListener('click', function() {
+      //   audio.play();
+      // });
 
-      // Event listener untuk tombol Stop Sound
-      document.getElementById('stopSoundButton').addEventListener('click', function() {
-        audio.pause();
-        audio.currentTime = 0;
-      });
+      // // Stop Audio
+      // document.getElementById('stopSoundButton').addEventListener('click', function() {
+      //   audio.pause();
+      //   audio.currentTime = 0;
+      // });
 
-      // Event listener untuk tombol Start
+      // Start Button
       document.getElementById('startButton').addEventListener('click', function() {
-        // Menghilangkan dan menonaktifkan tombol setelah diklik
+        audio.play();
+        // Hide Button
         document.getElementById('buttonContainer').style.display = 'none';
 
-        // Membawa canvas ke depan
+        // Set Game Canvas to front of layer
         var canvas = document.getElementById('unity-canvas');
         canvas.style.zIndex = '10000';
 
-        // Menyesuaikan tampilan untuk perangkat mobile
+        // this is copy from unity default export
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
           var meta = document.createElement('meta');
           meta.name = 'viewport';
@@ -92,7 +94,7 @@
           document.body.style.textAlign = "left";
         }
 
-        // Memulai instance Unity
+        // Start game unity Instance
         var myGameInstance = createUnityInstance(canvas, {
           dataUrl: "Build/Blizzard.data",
           frameworkUrl: "Build/Blizzard.framework.js",
