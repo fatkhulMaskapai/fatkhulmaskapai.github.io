@@ -9,7 +9,10 @@
       #unity-canvas {
         width: 600px;
         height: 960px;
-        background: url('Build/Blizzard.jpg') center / cover;
+        /* background: url('Build/Blizzard.jpg') center / cover; */
+        background: url('loadgame.png') center / cover;
+        background-position: center; 
+        background-size: cover;
         position: relative;
         z-index: 1; /* Default z-index */
       }
@@ -52,7 +55,7 @@
     <div id="buttonContainer">
       <!-- <button id="playSoundButton">Play Sound</button>
       <button id="stopSoundButton">Stop Sound</button> -->
-      <button id="startButton">Load Game v3</button>
+      <button id="startButton">Load Game</button>
     </div>
     <script>
       // //audio path
@@ -80,7 +83,7 @@
         var canvas = document.getElementById('unity-canvas');
         canvas.style.zIndex = '10000';
 
-        // this is copy from unity default export
+        //1. this is copy from unity default export
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
           var meta = document.createElement('meta');
           meta.name = 'viewport';
@@ -104,6 +107,8 @@
           productName: "Daumenfrosch Blizzard Blitz",
           productVersion: "1.0",
         });
+
+        //2.
       });
     </script>
   </body>
