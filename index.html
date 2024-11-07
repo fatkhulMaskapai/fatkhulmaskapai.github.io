@@ -4,33 +4,14 @@
     <meta charset="utf-8">
     <title>Unity WebGL Player | Daumenfrosch Blizzard Blitz</title>
     <style>
-      /* Kontainer untuk Canvas dengan Rasio Aspek Tetap */
+      /* Kontainer untuk Canvas dengan Tinggi Sesuai Perangkat */
       .canvas-container {
         position: relative;
         width: 100%;
-        height: 100%;
-        /* max-width: 600px; Lebar maksimum 600px */
-        max-width: 563px;
-
-        max-height: 900px; /* Tinggi maksimum 720px */
+        height: 100vh; /* Tinggi selalu sesuai dengan tinggi perangkat */
         margin: 0 auto; /* Memusatkan kontainer */
-        /* Menggunakan aspect-ratio jika didukung */
-        aspect-ratio: 600 / 960; /* Rasio asli 600 / 960 */
-        /* Fallback jika aspect-ratio tidak didukung */
-        /* background: url('ass/loadgame.png') center / cover; */
-        background: url('ass/loadgame.png');
-        background-position: center;
-        background-size: cover;
+        background: url('ass/loadgame.png') center / cover no-repeat;
         background-color: black;
-      }
-
-      /* Fallback untuk browser yang tidak mendukung aspect-ratio */
-      @supports not (aspect-ratio: 1) {
-        .canvas-container::before {
-          content: '';
-          display: block;
-          padding-top: 160%; /* (960 / 600) * 100% = 160% */
-        }
       }
 
       /* Canvas Mengisi Kontainer */
@@ -65,14 +46,6 @@
         border: none;
         cursor: pointer;
       }
-
-      #playSoundButton {
-        background-color: blue;
-      }
-
-      #stopSoundButton {
-        background-color: red;
-      }
     </style>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
@@ -87,66 +60,20 @@
       // Path audio
       var audio = new Audio('ass/buttonClick.mp3');
       var unityInstance = null;
-    
-      function getCanvasHeights() {
-          var canvas = document.getElementById('unity-canvas');
-
-          // Tinggi Internal
-          var internalHeight = canvas.height;
-
-          // Tinggi Tampilan
-          var displayHeight = canvas.offsetHeight;
-
-          console.log('Tinggi internal canvas: ' + internalHeight + 'px');
-          console.log('Tinggi tampilan canvas: ' + displayHeight + 'px');
-
-          return {
-            internalHeight: internalHeight,
-            displayHeight: displayHeight
-          };
-        }
-
-        // Fungsi untuk menyesuaikan ukuran canvas
-        function adjustCanvasSize() {
-          var canvas = document.getElementById('unity-canvas');
-          var container = document.querySelector('.canvas-container');
-          var rect = container.getBoundingClientRect();
-
-          // Sesuaikan ukuran internal canvas dengan ukuran tampilan
-          canvas.width = rect.width;
-          canvas.height = rect.height;
-        }
-
-        // Event listener untuk resize
-        window.addEventListener('resize', function() {
-          adjustCanvasSize();
-          getCanvasHeights();
-        });
-
-        // Panggil fungsi saat halaman dimuat atau saat canvas pertama kali ditampilkan
-        adjustCanvasSize();
-        getCanvasHeights();
-
-
-
-
 
       function resizeCanvasContainer() {
         var container = document.querySelector('.canvas-container');
         var windowWidth = window.innerWidth;
         var windowHeight = window.innerHeight;
 
-        // Hitung rasio aspek yang diinginkan (600 / 960)
+        // Rasio aspek yang diinginkan (lebar / tinggi)
         var desiredAspectRatio = 600 / 960;
 
-        var newWidth = windowWidth;
-        var newHeight = windowWidth / desiredAspectRatio;
+        // Tinggi kontainer selalu sesuai dengan tinggi perangkat
+        var newHeight = windowHeight;
+        var newWidth = newHeight * desiredAspectRatio;
 
-        if (newHeight > 720) {
-          newHeight = 720;
-          newWidth = newHeight * desiredAspectRatio;
-        }
-
+        // Jika lebar baru melebihi lebar jendela, sesuaikan
         if (newWidth > windowWidth) {
           newWidth = windowWidth;
           newHeight = newWidth / desiredAspectRatio;
@@ -154,10 +81,23 @@
 
         container.style.width = newWidth + 'px';
         container.style.height = newHeight + 'px';
-        container.style.height = newHeight + 'px';
-        console.log("Height: " + newHeight);
+
+        // Sesuaikan ukuran internal canvas
+        var canvas = document.getElementById('unity-canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
       }
+
+      // Panggil fungsi saat halaman dimuat
       resizeCanvasContainer();
+
+      // Event listener untuk resize
+      window.addEventListener('resize', function() {
+        resizeCanvasContainer();
+        // Jika diperlukan, beri tahu Unity tentang perubahan ukuran
+        // unityInstance.SendMessage('GameManager', 'OnScreenResize');
+      });
+
       document.getElementById('startButton').addEventListener('click', function() {
         audio.play();
         // Sembunyikan Tombol
@@ -175,6 +115,7 @@
 
         // Sesuaikan Ukuran Kontainer Canvas
         resizeCanvasContainer();
+
         // Buat Instance Unity
         unityInstance = createUnityInstance(canvas, {
           dataUrl: "Build/Blizzard.data",
@@ -186,14 +127,6 @@
           productVersion: "1.0",
           // matchWebGLToCanvasSize: true, // Default
         });
-
-        // Tambahkan Event Listener untuk Resize
-        window.addEventListener('resize', function() {
-          resizeCanvasContainer();
-          // Jika diperlukan, beri tahu Unity tentang perubahan ukuran
-          // unityInstance.SendMessage('GameManager', 'OnScreenResize');
-        });
-        // resizeCanvasContainer();
       });
     </script>
   </body>
