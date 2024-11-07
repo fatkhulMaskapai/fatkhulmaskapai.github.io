@@ -1,128 +1,137 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Daumenfrosch Blizzard Blitz</title>
-    <style>
-      /* Canvas Style Unity */
-      #unity-canvas {
-        width: 600px;
-        height: 960px;
-        /* background: url('Build/Blizzard.jpg') center / cover; */
-        background: url('ass/loadgame.png') center / cover;
-        background-position: center; 
-        background-size: cover;
-        position: relative;
-        z-index: 1; /* Default z-index */
-      }
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | Daumenfrosch Blizzard Blitz</title>
+  <style>
+    /* Fullscreen setup */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-      /* Button Container Style */
-      #buttonContainer {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        z-index: 9999;
-      }
+    /* Background utama di belakang semua elemen */
+    .background-fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('ass/new-background.jpg') no-repeat center center;
+      background-size: cover;
+      z-index: 0;
+    }
 
-      #buttonContainer button {
-        display: block;
-        margin: 10px auto;
-        padding: 20px 40px;
-        font-size: 24px;
-        color: white;
-        text-align: center;
-        font-weight: bold;
-        background-color: green;
-        border: none;
-        cursor: pointer;
-      }
+    /* Background tambahan di belakang tombol */
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('ass/overlay-background.jpg') no-repeat center center;
+      background-size: cover;
+      z-index: 2; /* Letakkan di belakang tombol */
+      opacity: 0.8; /* Atur opacity jika ingin transparansi */
+    }
 
-      #playSoundButton {
-        background-color: blue;
-      }
+    /* Unity Canvas Style */
+    #unity-canvas {
+      width: 600px;
+      height: 960px;
+      background: url('ass/loadgame.png') center / cover;
+      background-position: center; 
+      background-size: cover;
+      position: relative;
+      z-index: 1;
+    }
 
-      #stopSoundButton {
-        background-color: red;
-      }
-    </style>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width="600" height="960" tabindex="-1"></canvas>
-    <script src="Build/Blizzard.loader.js"></script>
-    <div id="buttonContainer">
-      <!-- <button id="playSoundButton">Play Sound</button>
-      <button id="stopSoundButton">Stop Sound</button> -->
-      <button id="startButton">Load Game</button>
-    </div>
-    <script>
-      // //audio path
-      var audio = new Audio('ass/buttonClick.mp3');
-      // var audio = new Audio('backgroundGame.mp3');
+    /* Button Container Style */
+    #buttonContainer {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 9999;
+    }
 
-      // // Play Audio
-      // document.getElementById('playSoundButton').addEventListener('click', function() {
-      //   audio.play();
-      // });
+    #buttonContainer button {
+      display: block;
+      margin: 10px auto;
+      padding: 20px 40px;
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      background-color: green;
+      border: none;
+      cursor: pointer;
+    }
 
-      // // Stop Audio
-      // document.getElementById('stopSoundButton').addEventListener('click', function() {
-      //   audio.pause();
-      //   audio.currentTime = 0;
-      // });
+    #playSoundButton {
+      background-color: blue;
+    }
 
-      // Start Button
-      document.getElementById('startButton').addEventListener('click', function() {
-        audio.play();
-        // Hide Button
-        document.getElementById('buttonContainer').style.display = 'none';
+    #stopSoundButton {
+      background-color: red;
+    }
+  </style>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  
+  <!-- Background utama -->
+  <div class="background-fullscreen"></div>
+  
+  <!-- Background tambahan di belakang tombol -->
+  <div class="background-layer"></div>
+  
+  <canvas id="unity-canvas" width="600" height="960" tabindex="-1"></canvas>
+  <script src="Build/Blizzard.loader.js"></script>
 
-        // Set Game Canvas to front of layer
-        var canvas = document.getElementById('unity-canvas');
-        canvas.style.zIndex = '10000';
+  <div id="buttonContainer">
+    <button id="startButton">Load Game</button>
+  </div>
 
-        // //1. this is copy from unity default export
-        // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        //   var meta = document.createElement('meta');
-        //   meta.name = 'viewport';
-        //   meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        //   document.getElementsByTagName('head')[0].appendChild(meta);
+  <script>
+    var audio = new Audio('ass/buttonClick.mp3');
 
-        //   canvas.style.width = "100%";
-        //   canvas.style.height = "100%";
-        //   canvas.style.position = "fixed";
-
-        //   document.body.style.textAlign = "left";
-        // }
-
-        // // Start game unity Instance
-        // var myGameInstance = createUnityInstance(canvas, {
-        //   dataUrl: "Build/Blizzard.data",
-        //   frameworkUrl: "Build/Blizzard.framework.js",
-        //   codeUrl: "Build/Blizzard.wasm",
-        //   streamingAssetsUrl: "StreamingAssets",
-        //   companyName: "AN",
-        //   productName: "Daumenfrosch Blizzard Blitz",
-        //   productVersion: "1.0",
-        // });
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
+    var canvas = document.getElementById('unity-canvas');
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
         document.getElementsByTagName('head')[0].appendChild(meta);
 
-        var canvas = document.querySelector("#unity-canvas");
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.position = "fixed";
-
         document.body.style.textAlign = "left";
       }
 
-      var gm =   createUnityInstance(document.querySelector("#unity-canvas"), {
+    // Start Button
+    document.getElementById('startButton').addEventListener('click', function() {
+      audio.play();
+      document.getElementById('buttonContainer').style.display = 'none';
+      canvas.style.zIndex = '10000';
+
+      // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      //   var meta = document.createElement('meta');
+      //   meta.name = 'viewport';
+      //   meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      //   document.getElementsByTagName('head')[0].appendChild(meta);
+
+      //   canvas.style.width = "100%";
+      //   canvas.style.height = "100%";
+      //   canvas.style.position = "fixed";
+      //   document.body.style.textAlign = "left";
+      // }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Blizzard.data",
         frameworkUrl: "Build/Blizzard.framework.js",
         codeUrl: "Build/Blizzard.wasm",
@@ -130,12 +139,8 @@
         companyName: "AN",
         productName: "Daumenfrosch Blizzard Blitz",
         productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
-
-        //2.
-      });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
