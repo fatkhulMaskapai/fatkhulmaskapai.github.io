@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unity WebGL Firebase Firestore</title>
+    <!-- Tambahkan Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div id="unityContainer"></div>
+    
+    <h2>Firebase Firestore Test</h2>
+    <button onclick="testAddDocument()">Add Document</button>
+    <button onclick="testGetDocument()">Get Document</button>
+    <button onclick="testUpdateDocument()">Update Document</button>
+    <button onclick="testDeleteDocument()">Delete Document</button>
+
+    <script>
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbkJ7ZzEWAOm8EPzy7dQynPrY8IZg-pGY",
+            authDomain: "daumenfrosch-blizzard-blitz.firebaseapp.com",
+            projectId: "daumenfrosch-blizzard-blitz",
+            storageBucket: "daumenfrosch-blizzard-blitz.firebasestorage.app",
+            messagingSenderId: "121279468398",
+            appId: "1:121279468398:web:fc5381d86e4b690ab9677f"
+        };
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Fungsi JavaScript untuk Firestore
+        function addDocument(collectionName, docData) {
+            db.collection(collectionName).add(docData)
+                .then((docRef) => {
+                    console.log("Document added with ID: ", docRef.id);
+                    alert("Document added with ID: " + docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    alert("Error adding document: " + error.message);
+                });
+        }
+
+        function getDocument(collectionName, docId) {
+            db.collection(collectionName).doc(docId).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        console.log("Document data:", doc.data());
+                        alert("Document data: " + JSON.stringify(doc.data()));
+                    } else {
+                        console.log("No such document!");
+                        alert("No such document!");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error getting document:", error);
+                    alert("Error getting document: " + error.message);
+                });
+        }
+
+        function updateDocument(collectionName, docId, updateData) {
+            db.collection(collectionName).doc(docId).update(updateData)
+                .then(() => {
+                    console.log("Document updated successfully");
+                    alert("Document updated successfully");
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                    alert("Error updating document: " + error.message);
+                });
+        }
+
+        function deleteDocument(collectionName, docId) {
+            db.collection(collectionName).doc(docId).delete()
+                .then(() => {
+                    console.log("Document deleted successfully");
+                    alert("Document deleted successfully");
+                })
+                .catch((error) => {
+                    console.error("Error deleting document: ", error);
+                    alert("Error deleting document: " + error.message);
+                });
+        }
+
+        // Fungsi untuk pengujian CRUD
+        function testAddDocument() {
+            const collectionName = "testCollection";
+            const docData = { name: "Test User", age: 30, email: "testuser@example.com" };
+            addDocument(collectionName, docData);
+        }
+
+        function testGetDocument() {
+            const collectionName = "testCollection";
+            const docId = prompt("Enter Document ID to Retrieve:");
+            if (docId) getDocument(collectionName, docId);
+        }
+
+        function testUpdateDocument() {
+            const collectionName = "testCollection";
+            const docId = prompt("Enter Document ID to Update:");
+            if (docId) {
+                const updateData = { age: 31, email: "updateduser@example.com" };
+                updateDocument(collectionName, docId, updateData);
+            }
+        }
+
+        function testDeleteDocument() {
+            const collectionName = "testCollection";
+            const docId = prompt("Enter Document ID to Delete:");
+            if (docId) deleteDocument(collectionName, docId);
+        }
+    </script>
+</body>
+</html>
