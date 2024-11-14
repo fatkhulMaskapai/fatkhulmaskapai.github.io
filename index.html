@@ -10,7 +10,7 @@
   
   <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script> -->
 
-    <script>
+    <!-- <script>
       // Pastikan Firebase SDK dimuat terlebih dahulu sebelum digunakan
       document.addEventListener("DOMContentLoaded", function() {
           // Konfigurasi Firebase
@@ -26,9 +26,8 @@
 
           // // Inisialisasi Firebase
           firebase.initializeApp(firebaseConfig);
-          const db = firebase.firestore();
       });
-  </script>
+  </script> -->
 
 
   <style>
@@ -126,6 +125,22 @@
 
   <script>
     var audio = new Audio('ass/buttonClick.mp3');
+
+    const firebaseConfig = {
+              apiKey: "AIzaSyDbkJ7ZzEWAOm8EPzy7dQynPrY8IZg-pGY",
+              authDomain: "daumenfrosch-blizzard-blitz.firebaseapp.com",
+              projectId: "daumenfrosch-blizzard-blitz",
+              storageBucket: "daumenfrosch-blizzard-blitz.firebasestorage.app",
+              messagingSenderId: "121279468398",
+              appId: "1:121279468398:web:fc5381d86e4b690ab9677f"
+          };
+
+
+    // // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+          
+    var unityInstance = null;
+    const db = firebase.firestore();
     // const db = firebase.firestore();
     // var unityInstance;
     var canvas = document.getElementById('unity-canvas');
@@ -144,99 +159,143 @@
         console.log("Receive: " + s + ", " + s2);
         // console.log(s + ", " + s2);
       }
+
+      // Read Doc Data from Firestore
+      async function readDataJs(collection, docId) {
+          console.log("Javascript Receive, Col: " + collection + ", doc: " + docId)
+            try {
+                const doc = await db.collection(collection).doc(docId).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    console.log("Data yang dibaca:", data);
+                    unityInstance.SendMessage('FirebaseBridge', 'OnDataRead', JSON.stringify({ success: true, data }));
+                } else {
+                    console.log("Dokumen tidak ditemukan!");
+                    unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: "Document not found" }));
+                }
+            } catch (error) {
+                console.error("Gagal membaca data:", error);
+                unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+            }
+        }
+        // Read All Document Data in collection on Firestore
+        async function readAllDocsJs(collection) {
+            try {
+                const snapshot = await db.collection(collection).get();
+                const docs = [];
+                
+                snapshot.forEach(doc => {
+                    docs.push({ id: doc.id, ...doc.data() });
+                });
+                
+                console.log("Semua dokumen dalam koleksi:", docs);
+                
+                // Kirim hasil ke Unity
+                unityInstance.SendMessage('FirebaseBridge', 'OnAllDocsRead', JSON.stringify({ success: true, data: docs }));
+            } catch (error) {
+                console.error("Gagal membaca dokumen:", error);
+                unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+            }
+        }
+        // Add / Write new data to Firestore
+        async function writeDataJs(collection, docId, data) {
+            var newdata = JSON.parse(data);
+              try {
+                  await db.collection(collection).doc(docId).set(newdata);
+                  console.log("Data berhasil ditulis:", newdata);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
+              } catch (error) {
+                  console.error("Gagal menulis data:", error);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+              }
+        }
+
+        // to auto-generated ID
+        async function addDataJs(collection, data) {
+            var newdata = JSON.parse(data);
+              try {
+                  await db.collection(collection).add(newdata);  // to auto-generated ID
+                  console.log("Data berhasil ditulis:", newdata);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
+              } catch (error) {
+                  console.error("Gagal menulis data:", error);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+              }
+        }
+          
+          // Update Data on Firestore
+        async function updateDataJs(collection, docId, data) {
+            var newdata = JSON.parse(data);
+            console.log("ReceiveUpdate, Col: " + collection + ", doc: " + docId + ", data: " + data + ", newData: " + newdata);
+              try {
+                  await db.collection(collection).doc(docId).update(newdata);
+                  // await db.collection(collection).doc(docId).set(newdata);
+                  console.log("Data berhasil diperbarui, old :", data);
+                  console.log("Data berhasil diperbarui, New :", newdata);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnDataUpdated', JSON.stringify({ success: true, data }));
+              } catch (error) {
+                  console.error("Gagal memperbarui data:", error);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+              }
+        }
+
+        // Delete Data from Firestore
+        async function deleteDataJs(collection, docId) {
+              try {
+                  await db.collection(collection).doc(docId).delete();
+                  console.log("Data berhasil dihapus");
+                  unityInstance.SendMessage('FirebaseBridge', 'OnDataDeleted', JSON.stringify({ success: true, docId }));
+              } catch (error) {
+                  console.error("Gagal menghapus data:", error);
+                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+              }
+        }
+
     // Start Button
     document.getElementById('startButton').addEventListener('click', function() {
       audio.play();
       document.getElementById('buttonContainer').style.display = 'none';
       canvas.style.zIndex = '10000';
 
-      // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      //   // Mobile device style: fill the whole browser client area with the game canvas:
-      //   var meta = document.createElement('meta');
-      //   meta.name = 'viewport';
-      //   meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-      //   document.getElementsByTagName('head')[0].appendChild(meta);
 
-      //   // var canvas = document.querySelector("#unity-canvas");
-      //   canvas.style.width = "100%";
-      //   canvas.style.height = "100%";
-      //   canvas.style.position = "fixed";
-
-      //   document.body.style.textAlign = "left";
-      // }
-
+              // Inisialisasi Unity WebGL dan simpan instance di unityInstance
         createUnityInstance(document.querySelector("#unity-canvas"), {
-        arguments: [],
-        dataUrl: "Build/Blizzard.data",
-        frameworkUrl: "Build/Blizzard.framework.js",
-        codeUrl: "Build/Blizzard.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "AN",
-        productName: "Daumenfrosch Blizzard Blitz",
-        productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
+            dataUrl: "Build/Blizzard.data",
+            frameworkUrl: "Build/Blizzard.framework.js",
+            codeUrl: "Build/Blizzard.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "AN",
+            productName: "Daumenfrosch Blizzard Blitz",
+            productVersion: "1.0",
+            // Uncomment this to separately control WebGL canvas render size and DOM element size.
+            // matchWebGLToCanvasSize: false,
+            // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        }).then(function(instance) {
+            unityInstance = instance; // Simpan instance Unity
+            console.log("Unity instance created:", unityInstance);
+        }).catch(function(error) {
+            console.error("Failed to create Unity instance:", error);
+        });
 
-      //  // Fungsi untuk menulis data ke Firestore
-      //  async function writeData(collection, docId, data) {
-      //       try {
-      //           await db.collection(collection).doc(docId).set(data);
-      //           console.log("Data berhasil ditulis:", data);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnDataWritten', JSON.stringify({ success: true, data }));
-      //       } catch (error) {
-      //           console.error("Gagal menulis data:", error);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnError', JSON.stringify({ success: false, error: error.message }));
-      //       }
-      //   }
+      //   createUnityInstance(document.querySelector("#unity-canvas"), {
+      //   arguments: [],
+      //   dataUrl: "Build/Blizzard.data",
+      //   frameworkUrl: "Build/Blizzard.framework.js",
+      //   codeUrl: "Build/Blizzard.wasm",
+      //   streamingAssetsUrl: "StreamingAssets",
+      //   companyName: "AN",
+      //   productName: "Daumenfrosch Blizzard Blitz",
+      //   productVersion: "1.0",
+      //   // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+      //   // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      // });
 
-      //   // Fungsi untuk membaca data dari Firestore
-      //   async function readData(collection, docId) {
-      //       try {
-      //           const doc = await db.collection(collection).doc(docId).get();
-      //           if (doc.exists) {
-      //               const data = doc.data();
-      //               console.log("Data yang dibaca:", data);
-      //               unityInstance.SendMessage('FirestoreAPI', 'OnDataRead', JSON.stringify({ success: true, data }));
-      //           } else {
-      //               console.log("Dokumen tidak ditemukan!");
-      //               unityInstance.SendMessage('FirestoreAPI', 'OnError', JSON.stringify({ success: false, error: "Document not found" }));
-      //           }
-      //       } catch (error) {
-      //           console.error("Gagal membaca data:", error);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnError', JSON.stringify({ success: false, error: error.message }));
-      //       }
-      //   }
 
-      //   // Fungsi untuk memperbarui data di Firestore
-      //   async function updateData(collection, docId, data) {
-      //       try {
-      //           await db.collection(collection).doc(docId).update(data);
-      //           console.log("Data berhasil diperbarui:", data);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnDataUpdated', JSON.stringify({ success: true, data }));
-      //       } catch (error) {
-      //           console.error("Gagal memperbarui data:", error);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnError', JSON.stringify({ success: false, error: error.message }));
-      //       }
-      //   }
-
-      //   // Fungsi untuk menghapus data dari Firestore
-      //   async function deleteData(collection, docId) {
-      //       try {
-      //           await db.collection(collection).doc(docId).delete();
-      //           console.log("Data berhasil dihapus");
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnDataDeleted', JSON.stringify({ success: true, docId }));
-      //       } catch (error) {
-      //           console.error("Gagal menghapus data:", error);
-      //           unityInstance.SendMessage('FirestoreAPI', 'OnError', JSON.stringify({ success: false, error: error.message }));
-      //       }
-      //   }
-
-        // // Ekspos fungsi ke Unity
-        // window.writeData = writeData;
-        // window.readData = readData;
-        // window.updateData = updateData;
-        // window.deleteData = deleteData;
+        // Ekspos fungsi ke Unity
+        window.writeData = writeData;
+        window.readData = readData;
+        window.updateData = updateData;
+        window.deleteData = deleteData;
 
 
 
