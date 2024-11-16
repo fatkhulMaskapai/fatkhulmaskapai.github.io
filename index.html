@@ -5,8 +5,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Unity WebGL Player | Daumenfrosch Blizzard Blitz</title>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   
   <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script> -->
 
@@ -160,6 +162,96 @@
         // console.log(s + ", " + s2);
       }
 
+      function registerJs(email, password){
+        console.log("Register: " + email + ", pass: ");
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            console.log("User registered:", userCredential.user);
+            unityInstance.SendMessage('FirebaseBridge', 'OnSuccessRegister', "Success" );
+            // unityInstance.SendMessage('FirebaseBridge', 'OnSuccessRegister', JSON.stringify({ success: false, error: error.message }) );
+          })
+          .catch((registerError) => {
+            console.error("Error registering user:", registerError);
+            unityInstance.SendMessage('FirebaseBridge', 'OnFailedRegister', "Failed Registered" );
+          });
+      }
+
+      async function registerToFirestoreJs(email, nickname){
+          const collectionRef = db.collection("Account");
+          const docRef = collectionRef.doc(email); // Use email as document ID
+
+          try {
+            const docSnapshot = await docRef.get();
+            const statusElement = document.getElementById("status");
+
+            if (docSnapshot.exists) {
+              // statusElement.textContent = `Document for "${email}" already exists.`;
+              unityInstance.SendMessage('FirebaseBridge', 'OnFailedRegister', "thie email already exists" );
+            } else {
+              await docRef.set({
+                email: email,
+                nickname: nickname,
+                score: 0,
+                createdAt: new Date()
+              });
+              console.log("Success register to Firestore: Account");
+              unityInstance.SendMessage('FirebaseBridge', 'OnSuccessRegister', "Success registered" );
+              // statusElement.textContent = `Document for "${email}" has been added.`;
+            }
+          } catch (error) {
+            console.error("Error register to Firestore Account");
+            unityInstance.SendMessage('FirebaseBridge', 'OnFailedRegister', "Failed Registered to Database" );
+            // document.getElementById("status").textContent = "Error: " + error.message;
+          }
+
+      }
+
+
+      // const collectionRef = db.collection("Account");
+      //         const docRef = collectionRef.doc(email); // Use email as document ID
+
+      //              try {
+      //   const docSnapshot = await docRef.get();
+      //   const statusElement = document.getElementById("status");
+
+      //   if (docSnapshot.exists) {
+      //     const data = docSnapshot.data();
+      //     if (data.nickname === localName) {
+      //       statusElement.textContent = `Nickname "${localName}" matches Firestore for email "${email}". No action taken.`;
+      //     } else {
+      //       await docRef.update({ nickname: nickname, score: score });
+      //       statusElement.textContent = `Document for "${email}" updated with new nickname and score.`;
+      //     }
+      //   } else {
+      //     await docRef.set({
+      //       email: email,
+      //       nickname: nickname,
+      //       score: score,
+      //       createdAt: new Date()
+      //     });
+      //     statusElement.textContent = `Document for "${email}" has been added.`;
+      //   }
+      // } catch (error) {
+      //   console.error("Error checking, comparing, or adding/updating document:", error);
+      //   document.getElementById("status").textContent = "Error: " + error.message;
+      // }
+
+      function loginJs(email, password){
+                // Periksa apakah email sudah terdaftar
+          console.log("Login: " + email + ", pass: ");
+          firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              // Login successful
+              console.log("User logged in:", userCredential.user);
+              unityInstance.SendMessage('FirebaseBridge', 'OnSuccessLogin', "Success Login" );
+            })
+            .catch((error) => {
+              console.log("Failed Login, cause: ", error)
+              unityInstance.SendMessage('FirebaseBridge', 'OnFailedLogin', "Failed Login" );
+            });
+      }
+
       // Read Doc Data from Firestore
       async function readDataJs(collection, docId) {
           console.log("Javascript Receive, Col: " + collection + ", doc: " + docId)
@@ -168,7 +260,9 @@
                 if (doc.exists) {
                     const data = doc.data();
                     console.log("Data yang dibaca:", data);
-                    unityInstance.SendMessage('FirebaseBridge', 'OnDataRead', JSON.stringify({ success: true, data }));
+                  
+                    unityInstance.SendMessage('FirebaseBridge', 'OnDataRead', JSON.stringify(doc.data(), null, 2));
+                    // unityInstance.SendMessage('FirebaseBridge', 'OnDataRead', JSON.stringify({ success: true, data }));
                 } else {
                     console.log("Dokumen tidak ditemukan!");
                     unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: "Document not found" }));
@@ -296,8 +390,6 @@
         window.readData = readData;
         window.updateData = updateData;
         window.deleteData = deleteData;
-
-
 
     });
   </script>

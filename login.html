@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login with Firebase</title>
+  <!-- <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script> -->
+  
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    form {
+      display: inline-block;
+      margin-top: 20px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #6200ea;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3700b3;
+    }
+    .message {
+      margin-top: 20px;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login with Firebase</h1>
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+  <div class="message" id="message"></div>
+
+  <script>
+    // Firebase configuration
+    // const firebaseConfig = {
+    //   apiKey: "YOUR_API_KEY",
+    //   authDomain: "YOUR_AUTH_DOMAIN",
+    //   projectId: "YOUR_PROJECT_ID",
+    //   storageBucket: "YOUR_STORAGE_BUCKET",
+    //   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    //   appId: "YOUR_APP_ID"
+    // };
+
+    const firebaseConfig = {
+              apiKey: "AIzaSyDbkJ7ZzEWAOm8EPzy7dQynPrY8IZg-pGY",
+              authDomain: "daumenfrosch-blizzard-blitz.firebaseapp.com",
+              projectId: "daumenfrosch-blizzard-blitz",
+              storageBucket: "daumenfrosch-blizzard-blitz.firebasestorage.app",
+              messagingSenderId: "121279468398",
+              appId: "1:121279468398:web:fc5381d86e4b690ab9677f"
+          };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.getAuth(app);
+
+    // Handle Login
+    const loginForm = document.getElementById("login-form");
+    const messageDiv = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await firebase.signInWithEmailAndPassword(auth, email, password);
+        messageDiv.textContent = "Login successful!";
+        messageDiv.style.color = "green";
+        console.log("User logged in:", userCredential.user);
+        // Redirect or perform other actions after login
+      } catch (error) {
+        messageDiv.textContent = error.message;
+        messageDiv.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>
