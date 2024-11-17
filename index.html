@@ -125,30 +125,31 @@
   <script src="Build/Blizzard.loader.js"></script>
 
   <div id="buttonContainer">
-    <button id="startButton">Load Game V4</button>
+    <button id="startButton">Load Game V5</button>
   </div>
 
   <script>
 
         // Inisialisasi Google Sign-In setelah script dimuat
-      window.onload = function () {
-            google.accounts.id.initialize({
-                // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
-                client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
-                callback: handleCredentialResponse
-            });
+  window.onload = function () {
+        google.accounts.id.initialize({
+            // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
+            client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
+            callback: handleCredentialResponse,
+            auto_select: false // Nonaktifkan otomatis login
+        });
 
-            
-            // // Render tombol sign-in
-            // google.accounts.id.renderButton(
-            //     document.querySelector('.g_id_signin'),
-            //     { theme: "outline", size: "large" }  // opsi lainnya tersedia
-            // );
+        
+        // // Render tombol sign-in
+        // google.accounts.id.renderButton(
+        //     document.querySelector('.g_id_signin'),
+        //     { theme: "outline", size: "large" }  // opsi lainnya tersedia
+        // );
 
-            // // Jangan secara otomatis memunculkan prompt
-            // google.accounts.id.prompt();
-            console.log("Window Load");
-        }
+        // // Jangan secara otomatis memunculkan prompt
+        // google.accounts.id.prompt();
+        console.log("Window Load");
+    }
     function handleCredentialResponse(response) {
         // Decode JWT token
         const data = parseJwt(response.credential);
