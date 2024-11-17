@@ -14,27 +14,6 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   
   <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script> -->
-
-    <!-- <script>
-      // Pastikan Firebase SDK dimuat terlebih dahulu sebelum digunakan
-      document.addEventListener("DOMContentLoaded", function() {
-          // Konfigurasi Firebase
-          const firebaseConfig = {
-              apiKey: "AIzaSyDbkJ7ZzEWAOm8EPzy7dQynPrY8IZg-pGY",
-              authDomain: "daumenfrosch-blizzard-blitz.firebaseapp.com",
-              projectId: "daumenfrosch-blizzard-blitz",
-              storageBucket: "daumenfrosch-blizzard-blitz.firebasestorage.app",
-              messagingSenderId: "121279468398",
-              appId: "1:121279468398:web:fc5381d86e4b690ab9677f"
-          };
-
-
-          // // Inisialisasi Firebase
-          firebase.initializeApp(firebaseConfig);
-      });
-  </script> -->
-
-
   <style>
     /* Fullscreen setup */
     body, html {
@@ -125,7 +104,7 @@
   <script src="Build/Blizzard.loader.js"></script>
 
   <div id="buttonContainer">
-    <button id="startButton">Load Game V9</button>
+    <button id="startButton">Load Game V10</button>
   </div>
 
   <script>
@@ -138,7 +117,6 @@
             callback: handleCredentialResponse
         });
 
-        
         // // Render tombol sign-in
         // google.accounts.id.renderButton(
         //     document.querySelector('.g_id_signin'),
@@ -158,6 +136,7 @@
         console.log("Picture: " + data.picture);
         var tikData = {imageUrl: data.picture, nickname: data.name, email: data.email};
         unityInstance.SendMessage('FirebaseBridge', 'OnSuccessLoginGoogle', JSON.stringify(tikData));
+        console.log("AllData: ", data);
         // // Tampilkan informasi pengguna
         // document.getElementById('user-info').style.display = 'block';
         // document.getElementById('user-pic').src = data.picture;
@@ -181,22 +160,12 @@
 
 
     function loginGoogleJs(){
-      // google.accounts.id.initialize({
-      //       // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
-      //       client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
-      //       callback: handleCredentialResponse
-      //   });
-        // Jangan secara otomatis memunculkan prompt
         google.accounts.id.prompt();
     }
     function signOutJs() {
             const client = google.accounts.id;
             client.disableAutoSelect();
             console.log("Signout Google");
-            // // Sembunyikan informasi pengguna
-            // document.getElementById('user-info').style.display = 'none';
-            // // Tampilkan kembali tombol sign-in
-            // document.querySelector('.g_id_signin').style.display = 'block';
     }
 
 
@@ -230,10 +199,6 @@
         canvas.style.height = "100%";
         canvas.style.position = "fixed";
         document.body.style.textAlign = "left";
-      }
-      function Test(s, s2){
-        console.log("Receive: " + s + ", " + s2);
-        // console.log(s + ", " + s2);
       }
 
       function registerJs(email, password){
