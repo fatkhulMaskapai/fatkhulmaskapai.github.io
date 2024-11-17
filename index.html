@@ -125,30 +125,30 @@
   <script src="Build/Blizzard.loader.js"></script>
 
   <div id="buttonContainer">
-    <button id="startButton">Load Game V8</button>
+    <button id="startButton">Load Game V9</button>
   </div>
 
   <script>
 
         // Inisialisasi Google Sign-In setelah script dimuat
-  // window.onload = function () {
-  //       google.accounts.id.initialize({
-  //           // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
-  //           client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
-  //           callback: handleCredentialResponse
-  //       });
+  window.onload = function () {
+        google.accounts.id.initialize({
+            // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
+            client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
+            callback: handleCredentialResponse
+        });
 
         
-  //       // // Render tombol sign-in
-  //       // google.accounts.id.renderButton(
-  //       //     document.querySelector('.g_id_signin'),
-  //       //     { theme: "outline", size: "large" }  // opsi lainnya tersedia
-  //       // );
+        // // Render tombol sign-in
+        // google.accounts.id.renderButton(
+        //     document.querySelector('.g_id_signin'),
+        //     { theme: "outline", size: "large" }  // opsi lainnya tersedia
+        // );
 
-  //       // // Jangan secara otomatis memunculkan prompt
-  //       // google.accounts.id.prompt();
-  //       console.log("Window Load");
-  //   }
+        // // Jangan secara otomatis memunculkan prompt
+        // google.accounts.id.prompt();
+        console.log("Window Load");
+    }
     function handleCredentialResponse(response) {
         // Decode JWT token
         const data = parseJwt(response.credential);
@@ -181,11 +181,11 @@
 
 
     function loginGoogleJs(){
-      google.accounts.id.initialize({
-            // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
-            client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
-            callback: handleCredentialResponse
-        });
+      // google.accounts.id.initialize({
+      //       // client_id: 'YOUR_CLIENT_ID',//blizzard-441513
+      //       client_id: '53710440730-a7j6uvpd0jqfrtvpjnq334mfmca7hmfl.apps.googleusercontent.com',//
+      //       callback: handleCredentialResponse
+      //   });
         // Jangan secara otomatis memunculkan prompt
         google.accounts.id.prompt();
     }
@@ -280,36 +280,6 @@
           }
 
       }
-
-
-      // const collectionRef = db.collection("Account");
-      //         const docRef = collectionRef.doc(email); // Use email as document ID
-
-      //              try {
-      //   const docSnapshot = await docRef.get();
-      //   const statusElement = document.getElementById("status");
-
-      //   if (docSnapshot.exists) {
-      //     const data = docSnapshot.data();
-      //     if (data.nickname === localName) {
-      //       statusElement.textContent = `Nickname "${localName}" matches Firestore for email "${email}". No action taken.`;
-      //     } else {
-      //       await docRef.update({ nickname: nickname, score: score });
-      //       statusElement.textContent = `Document for "${email}" updated with new nickname and score.`;
-      //     }
-      //   } else {
-      //     await docRef.set({
-      //       email: email,
-      //       nickname: nickname,
-      //       score: score,
-      //       createdAt: new Date()
-      //     });
-      //     statusElement.textContent = `Document for "${email}" has been added.`;
-      //   }
-      // } catch (error) {
-      //   console.error("Error checking, comparing, or adding/updating document:", error);
-      //   document.getElementById("status").textContent = "Error: " + error.message;
-      // }
 
       function loginJs(email, password){
                 // Periksa apakah email sudah terdaftar
