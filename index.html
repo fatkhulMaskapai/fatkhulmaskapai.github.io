@@ -63,7 +63,8 @@
     /* Button Container Style */
     #buttonContainer {
       position: absolute;
-      top: 65%;
+      /* top: 65%; */
+      bottom: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
@@ -75,10 +76,12 @@
       margin: 10px auto;
       padding: 20px 40px;
       font-size: 24px;
-      color: white;
+      /* color: white; */
+      color: black;
       text-align: center;
       font-weight: bold;
-      background-color: green;
+      /* background-color: green; */
+      background-color: transparent; 
       border: none;
       cursor: pointer;
     }
@@ -103,11 +106,25 @@
   <canvas id="unity-canvas" width="600" height="960" tabindex="-1"></canvas>
   <script src="Build/Blizzard.loader.js"></script>
 
+
+
   <div id="buttonContainer">
     <button id="startButton">Load Game V19</button>
+
+        <!-- Login Google -->
+        <button class="google-login-btn" onclick="googleLogin()">
+          <!-- <img src="ass/Google.png" alt="Google Logo"> -->
+        </button>
+  </div>
+  <div id="buttonGoogle">
+        <!-- Login Google -->
+        <button class="google-login-btn" onclick="googleLogin()">
+          <!-- <img src="ass/Google.png" alt="Google Logo"> -->
+        </button>
   </div>
 
   <script>
+
 
         // Inisialisasi Google Sign-In setelah script dimuat
   window.onload = function () {
@@ -117,16 +134,25 @@
             callback: handleCredentialResponse
         });
 
-        // // Render tombol sign-in
-        // google.accounts.id.renderButton(
-        //     document.querySelector('.g_id_signin'),
-        //     { theme: "outline", size: "large" }  // opsi lainnya tersedia
-        // );
+        // Render tombol sign-in
+        google.accounts.id.renderButton(
+          document.querySelector('.google-login-btn'),
+          { theme: "outline", size: "large" }  // opsi lainnya tersedia
+      );
 
         // // Jangan secara otomatis memunculkan prompt
         // google.accounts.id.prompt();
         console.log("Window Load");
     }
+
+
+    function googleLogin() {
+                    // Jangan secara otomatis memunculkan prompt
+                    // google.accounts.id.prompt();
+    //   alert('Login with Google clicked!');
+      // Tambahkan logika autentikasi Google di sini
+    }
+
     function handleCredentialResponse(response) {
         // Decode JWT token
         const data = parseJwt(response.credential);
