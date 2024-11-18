@@ -109,7 +109,7 @@
 
 
   <div id="buttonContainer">
-    <button id="startButton">Load Game V19</button>
+    <button id="startButton">Load Game V20</button>
 
         <!-- Login Google -->
         <button class="google-login-btn" onclick="googleLogin()">
@@ -380,53 +380,40 @@
               }
         }
 
+        function startGame(){
+          audio.play();
+          document.getElementById('buttonContainer').style.display = 'none';
+          canvas.style.zIndex = '10000';
+
+
+                  // Inisialisasi Unity WebGL dan simpan instance di unityInstance
+            createUnityInstance(document.querySelector("#unity-canvas"), {
+                dataUrl: "Build/Blizzard.data",
+                frameworkUrl: "Build/Blizzard.framework.js",
+                codeUrl: "Build/Blizzard.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "AN",
+                productName: "Daumenfrosch Blizzard Blitz",
+                productVersion: "1.0",
+                // Uncomment this to separately control WebGL canvas render size and DOM element size.
+                // matchWebGLToCanvasSize: false,
+                // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+            }).then(function(instance) {
+                unityInstance = instance; // Simpan instance Unity
+                console.log("Unity instance created:", unityInstance);
+            }).catch(function(error) {
+                console.error("Failed to create Unity instance:", error);
+            });
+            // Ekspos fungsi ke Unity
+            window.writeData = writeData;
+            window.readData = readData;
+            window.updateData = updateData;
+            window.deleteData = deleteData;
+        }
+
     // Start Button
     document.getElementById('startButton').addEventListener('click', function() {
-      audio.play();
-      document.getElementById('buttonContainer').style.display = 'none';
-      canvas.style.zIndex = '10000';
-
-
-              // Inisialisasi Unity WebGL dan simpan instance di unityInstance
-        createUnityInstance(document.querySelector("#unity-canvas"), {
-            dataUrl: "Build/Blizzard.data",
-            frameworkUrl: "Build/Blizzard.framework.js",
-            codeUrl: "Build/Blizzard.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "AN",
-            productName: "Daumenfrosch Blizzard Blitz",
-            productVersion: "1.0",
-            // Uncomment this to separately control WebGL canvas render size and DOM element size.
-            // matchWebGLToCanvasSize: false,
-            // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-        }).then(function(instance) {
-            unityInstance = instance; // Simpan instance Unity
-            console.log("Unity instance created:", unityInstance);
-        }).catch(function(error) {
-            console.error("Failed to create Unity instance:", error);
-        });
-
-      //   createUnityInstance(document.querySelector("#unity-canvas"), {
-      //   arguments: [],
-      //   dataUrl: "Build/Blizzard.data",
-      //   frameworkUrl: "Build/Blizzard.framework.js",
-      //   codeUrl: "Build/Blizzard.wasm",
-      //   streamingAssetsUrl: "StreamingAssets",
-      //   companyName: "AN",
-      //   productName: "Daumenfrosch Blizzard Blitz",
-      //   productVersion: "1.0",
-      //   // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-      //   // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      // });
-
-
-        // Ekspos fungsi ke Unity
-        window.writeData = writeData;
-        window.readData = readData;
-        window.updateData = updateData;
-        window.deleteData = deleteData;
-
-
+      startGame();
     });
   </script>
 </body>
