@@ -163,6 +163,7 @@
         var tikData = {imageUrl: data.picture, nickname: data.name, email: data.email};
         unityInstance.SendMessage('FirebaseBridge', 'OnSuccessLoginGoogle', JSON.stringify(tikData));
         console.log("AllData: ", data);
+        startGame();
         // // Tampilkan informasi pengguna
         // document.getElementById('user-info').style.display = 'block';
         // document.getElementById('user-pic').src = data.picture;
