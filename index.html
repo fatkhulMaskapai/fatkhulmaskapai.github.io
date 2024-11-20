@@ -54,7 +54,8 @@
       width: 600px;
       height: 960px;
       background: url('ass/loadgame.png') center / cover;
-      background-position: center; 
+      
+      -position: center; 
       background-size: cover;
       position: relative;
       z-index: 1;
@@ -90,8 +91,8 @@
 
     #buttonGoogle {
       position: absolute;
-      /* top: 65%; */
-      bottom: 20%;
+      top: 38%;
+      /* bottom: 20%; */
       left: 50%;
       height: 50px;
       width: 100;
@@ -130,7 +131,7 @@
 
 
   <div id="buttonContainer">
-    <button id="startButton">Load Game V22</button>
+    <button id="startButton">Load Game V23</button>
   </div>
 
   
@@ -166,7 +167,8 @@
     var canvas = document.getElementById('unity-canvas');
 
     var googleButton = document.getElementById('buttonGoogle');
-    googleButton.style.zIndex = '0';
+    googleButton.style.zIndex = '1';
+
     function showGoogleButtonJs(id){
       if(id == "1"){
         console.log("Show Login Button");
@@ -354,39 +356,39 @@
                     docs.push({ id: doc.id, ...doc.data() });
                 });
                 
-                console.log("Semua dokumen dalam koleksi:", docs);
+                console.log("all documen in collection:", docs);
                 
                 // Kirim hasil ke Unity
                 unityInstance.SendMessage('FirebaseBridge', 'OnAllDocsRead', JSON.stringify({ success: true, data: docs }));
             } catch (error) {
-                console.error("Gagal membaca dokumen:", error);
+                console.error("Can't read document:", error);
                 unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
             }
         }
         // Add / Write new data to Firestore
         async function writeDataJs(collection, docId, data) {
             var newdata = JSON.parse(data);
-              try {
-                  await db.collection(collection).doc(docId).set(newdata);
-                  console.log("Data berhasil ditulis:", newdata);
-                  unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
-              } catch (error) {
-                  console.error("Gagal menulis data:", error);
-                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
-              }
+            try {
+                await db.collection(collection).doc(docId).set(newdata);
+                console.log("Successfully write data: ", newdata);
+                unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
+            } catch (error) {
+                console.error("Failed to write the data: ", error);
+                unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+            }
         }
 
         // to auto-generated ID
         async function addDataJs(collection, data) {
             var newdata = JSON.parse(data);
-              try {
-                  await db.collection(collection).add(newdata);  // to auto-generated ID
-                  console.log("Data berhasil ditulis:", newdata);
-                  unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
-              } catch (error) {
-                  console.error("Gagal menulis data:", error);
-                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
-              }
+            try {
+                await db.collection(collection).add(newdata);  // to auto-generated ID
+                console.log("Successfully write the data: ", newdata);
+                unityInstance.SendMessage('FirebaseBridge', 'OnDataWritten', JSON.stringify({ success: true, data }));
+            } catch (error) {
+                console.error("Failed to write the data: ", error);
+                unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+            }
         }
           
           // Update Data on Firestore
@@ -396,33 +398,32 @@
               try {
                   await db.collection(collection).doc(docId).update(newdata);
                   // await db.collection(collection).doc(docId).set(newdata);
-                  console.log("Data berhasil diperbarui, old :", data);
-                  console.log("Data berhasil diperbarui, New :", newdata);
+                  console.log("Data, old :", data);
+                  console.log("Data, New :", newdata);
                   unityInstance.SendMessage('FirebaseBridge', 'OnDataUpdated', JSON.stringify({ success: true, data }));
               } catch (error) {
-                  console.error("Gagal memperbarui data:", error);
+                  console.error("Failed to update data:", error);
                   unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
               }
         }
 
         // Delete Data from Firestore
         async function deleteDataJs(collection, docId) {
-              try {
-                  await db.collection(collection).doc(docId).delete();
-                  console.log("Data berhasil dihapus");
-                  unityInstance.SendMessage('FirebaseBridge', 'OnDataDeleted', JSON.stringify({ success: true, docId }));
-              } catch (error) {
-                  console.error("Gagal menghapus data:", error);
-                  unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
-              }
+            try {
+                await db.collection(collection).doc(docId).delete();
+                console.log("Data has been deleted");
+                unityInstance.SendMessage('FirebaseBridge', 'OnDataDeleted', JSON.stringify({ success: true, docId }));
+            } catch (error) {
+                console.error("Failed to delete data:", error);
+                unityInstance.SendMessage('FirebaseBridge', 'OnError', JSON.stringify({ success: false, error: error.message }));
+            }
         }
         function startGame(){
           audio.play();
           document.getElementById('buttonContainer').style.display = 'none';
           canvas.style.zIndex = '10000';
 
-
-                  // Inisialisasi Unity WebGL dan simpan instance di unityInstance
+            // Inisialisasi Unity WebGL dan simpan instance di unityInstance
             createUnityInstance(document.querySelector("#unity-canvas"), {
                 dataUrl: "Build/Blizzard.data",
                 frameworkUrl: "Build/Blizzard.framework.js",
