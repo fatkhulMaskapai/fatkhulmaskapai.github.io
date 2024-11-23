@@ -1,303 +1,240 @@
-body {
-    background-color: #0b362e;
+/* Reset CSS */
+* {
     margin: 0;
-    font-family: helvetica;
-    color: white;
-    /* untuk memberi jarak anatar baris atas dengan bawahnya */
-    line-height: 30px;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+/* Umum */
+body {
+    font-family: helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+    /* background-color: #0b362e; */
+}
+
 
 .container {
     width: 90%;
-    margin: 50px auto;
-}
-
-.h11 {
-    text-align: center;
-    animation: muncul 2s ease;
-}
-
-.table-container {
-    width: 100%;
-}
-
-.table-container td {
-    vertical-align: top;
-    padding: 15px;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
 }
 
 .title {
-    background-color: #000000;
-    color: white;
-    padding: 10px 20px;
-    margin: 0;
-    display: inline-block;
-    border-bottom-right-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 30px;
-    min-width: 300px;
     text-align: center;
+    margin: 20px 0;
+    color: #444;
 }
 
 hr {
-    margin: 0;
-    border: solid 1px #0f6177;
-    animation: seratus 1s ease;
+    border: none;
+    height: 1px;
+    background-color: #ddd;
+    margin: 20px 0;
 }
 
-.profile {
-    width: 50%;
+/* Layout Utama */
+.profile-skill, .experience-education {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 40px;
 }
 
-.profile .title {
-    /* animani profil */
-    animation: dropkiri 0.5s ease;
+.profile, .skill, .experience, .education {
+    flex: 0 0 48%;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
+@media (max-width: 768px) {
+    .profile, .skill, .experience, .education {
+        flex: 0 0 100%;
+    }
+}
+
+/* Profil */
 .profile img {
-    width: 200px;
-    float: left;
-    margin-right: 15px;
+    width: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
 }
 
-.skill .title {
-    /*animasiskill*/
-    animation: dropkanan 1s ease;
-    -webkit-animation: dropkanan 1s ease;
+.profile span {
+    display: block;
+    margin-top: 20px;
+    text-align: justify;
 }
 
-.project .title {
-    /* animasi project */
-    animation: dropkiri 0.5s ease;
-}
-
-.experience .title .tabel {
-    /* animasi Experience */
-    animation: dropkiri 0.5s ease;
-}
-
-.education .title {
-    /* animasi edukasi */
-    animation: dropkanan 0.5s ease;
-}
-
-.contact .title {
-    /* animasi project */
-    animation: dropkiri 0.5s ease;
-}
-
-.biasa {
-    /* animasi project */
-    animation: dropkiri 0.5s ease;
-}
-
-.skill .content {
-    background-color: #2a3836;
-    color: #333333;
-    padding: 10px;
-}
-
+/* Skill */
 .skill ul {
-    margin: 0;
     list-style: none;
 }
 
 .skill li {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f1f1f1f1;
-    color: #f1f1f1f1;
-    transition: all 0.5s;
+    margin-bottom: 20px;
 }
 
-.skill .level1 {
-    width: 70%;
-    background-color: #0f6177;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    margin-top: 10px;
+.skill li div {
+    background-color: #ddd;
+    height: 10px;
     border-radius: 5px;
-    animation: dropskill1 1s ease;
+    overflow: hidden;
 }
 
-.skill .level2 {
-    background-color: #0f6177;
-    width: 80%;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    margin-top: 10px;
-    border-radius: 5px;
-    animation: dropskill2 1s ease;
+.skill li div::after {
+    content: '';
+    display: block;
+    height: 100%;
+    background-color: #4caf50;
 }
 
-.skill .level3 {
-    background-color: #0f6177;
+.level1::after {
+    width: 85%;
+}
+
+.level2::after {
+    width: 90%;
+}
+
+.level3::after {
     width: 50%;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    margin-top: 10px;
-    border-radius: 5px;
-    animation: dropskill3 1s ease;
 }
 
-
-/* tabel myExperience */
+/* Experience & Education */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
 
 .tabel {
-    margin-top: 15px;
-    border-collapse: collapse;
     width: 100%;
-    text-align: center;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabel th, .tabel td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
 }
 
 .tabel th {
-    background-color: #0f6177;
-    padding: 10px 15px;
+    background-color: #f4f4f4;
 }
 
-.tabel td {
-    padding: 10px 15px;
-    color: #333333;
-}
-
-
-/* tabel data gENAP */
-
-.tabel tr:nth-child(odd) {
-    background-color: #999999;
-}
-
-
-/* tabel data ganjil */
-
-.tabel tr:nth-child(even) {
-    background-color: white;
-}
-
+/* Projects */
 .project .content {
-    width: 25%;
-    float: left;
-    text-align: center;
-    padding: 15px;
-    box-sizing: border-box;
-    /* borderbox membuat lebar tetap 25% meski ketambahan padding 15px */
+    margin-bottom: 40px;
 }
 
-.project img {
-    width: 80%;
+.project .content h2 {
+    margin-bottom: 10px;
 }
 
-footer {
-    background-color: rgb(34, 43, 46);
-    padding: 15px 0px;
+.project .content img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
 }
 
-input[type="text"],
-textarea {
-    outline: none;
-    padding: 10px 20px;
-    background-color: #e8e8e8;
-    font-family: helvetica;
-    border: solid 3px #e8e8e8;
-    font-size: 14px;
-    border-radius: 5px;
-    transition: all 0.5s;
+.project .content p {
+    margin-top: 10px;
+    text-align: justify;
 }
 
-
-/* apabila terfokus/yg di pilih */
-
-input[type="text"]:focus,
-textarea:focus {
-    background-color: white;
-    border: solid 3px #0b8389;
-    transition: all 0.5s;
+/* Kontak */
+.contact {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
 }
 
-.form-group {
+.contact .form-group {
     margin-bottom: 15px;
-    font-size: 16px;
 }
 
-button {
+.contact input[type="text"],
+.contact textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.contact button {
     padding: 10px 20px;
-    border-radius: 15px;
+    border: none;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
-button[type="submit"] {
-    background-color: #0b8389;
-    border-bottom: 3px solid #036a6f;
-    color: white;
+/* Card Container */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
-button[type="reset"] {
-    background-color: #d12f2f;
-    border-bottom: 3px solid #5c1212;
-    color: white;
+/* Individual Card */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 48%;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
 }
 
-@keyframes muncul {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+.card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
 }
 
-@keyframes dropkanan {
-    0% {
-        transform: translateX(600px);
-    }
-    100% {
-        transform: translateX(0);
-    }
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-@keyframes dropkiri {
-    0% {
-        transform: translateX(-600px);
-    }
-    100% {
-        transform: translateX(0);
-    }
+.card p {
+    font-size: 1em;
+    line-height: 1.5;
+    text-align: justify;
+    flex-grow: 1;
 }
 
-@keyframes dropskill1 {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 70%;
-    }
-}
-
-@keyframes dropskill2 {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 80%;
-    }
-}
-
-@keyframes dropskill3 {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 50%;
-    }
-}
-
-@keyframes seratus {
-    0% {
-        width: 0%;
-    }
-    100% {
+/* Adjust card width for smaller screens */
+@media (max-width: 768px) {
+    .card {
         width: 100%;
+    }
+}
+
+
+.contact button:hover {
+    background-color: #45a049;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .profile-skill, .experience-education {
+        flex-direction: column;
+    }
+
+    .project .content img {
+        max-width: 100%;
     }
 }
