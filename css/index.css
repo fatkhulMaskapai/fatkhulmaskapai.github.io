@@ -106,17 +106,19 @@ hr {
 }
 
 .level1::after {
-    width: 85%;
+    width: 95%;
 }
 
 .level2::after {
-    width: 90%;
+    width: 85%;
 }
 
 .level3::after {
-    width: 50%;
+    width: 75%;
 }
-
+.level4::after {
+    width: 60%;
+}
 /* Experience & Education */
 .table-container {
     width: 100%;
@@ -240,6 +242,39 @@ hr {
 .contact button:hover {
     background-color: #45a049;
 }
+
+
+
+
+.contact_info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contact_info  th, .contact_info  td {
+    text-align: left;
+    padding: 8px;
+    vertical-align: top;
+}
+
+.contact_info  th {
+    width: 120px;
+    font-weight: bold;
+}
+
+.contact_info  tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.concontact_info tact a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.contact_info  a:hover {
+    text-decoration: underline;
+}
+
 
 /* Responsif */
 @media (max-width: 768px) {
