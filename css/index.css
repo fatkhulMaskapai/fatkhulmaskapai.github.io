@@ -122,6 +122,9 @@ hr {
 .level5::after {
     width: 45%;
 }
+.level6::after {
+    width: 35%;
+}
 /* Experience & Education */
 .table-container {
     width: 100%;
